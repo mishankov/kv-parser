@@ -10,9 +10,8 @@ impl Parser {
     pub fn parse(&self) -> HashMap<String, String> {
         let mut result: HashMap<String, String> = HashMap::new();
         let mut current_key: Option<String> = None;
-        let tokens_iter = self.tokens.iter();
 
-        for token in tokens_iter {
+        for token in self.tokens.iter() {
             match (&token.kind, &token.value, &current_key) {
                 (TokenKind::Key, Some(key), None) => current_key = Some(key.to_string()),
                 (TokenKind::Value, Some(value), Some(key)) => {
