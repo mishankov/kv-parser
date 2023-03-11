@@ -11,12 +11,9 @@ fn main() {
         Ok(content) => content,
         Err(_) => todo!(),
     };
-
     println!("File content: {file_content}");
 
     let lexer = Lexer::new(file_content);
-    println!("{:?}", lexer);
-
     let tokens = lexer.get_tokens();
     println!("{:?}", tokens);
 

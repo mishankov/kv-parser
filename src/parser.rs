@@ -13,30 +13,15 @@ impl Parser {
         let tokens_iter = self.tokens.iter();
 
         for token in tokens_iter {
-            match &current_key {
-                Some(key) => match token.kind {
-                    TokenKind::Key => continue,
-                    TokenKind::EqSign => continue,
-                    TokenKind::Value => match &token.value {
-                        Some(value) => {
-                            result.insert(key.to_string(), value.to_string());
-                            current_key = None;
-                            continue;
-                        }
-                        None => continue,
-                    },
-                },
-                None => match token.kind {
-                    TokenKind::Key => match &token.value {
-                        Some(value) => current_key = Some(value.to_string()),
-                        None => continue,
-                    },
-                    TokenKind::EqSign => continue,
-                    TokenKind::Value => continue,
-                },
+            match (&token.kind, &token.value, &current_key) {
+                (TokenKind::Key, Some(key), None) => current_key = Some(key.to_string()),
+                (TokenKind::Value, Some(value), Some(key)) => {
+                    result.insert(key.to_string(), value.to_string());
+                    current_key = None;
+                }
+                (_, _, _) => continue,
             }
         }
-
         return result;
     }
 }
